@@ -34,6 +34,12 @@ class Space {
 class Piece {
 
 
+    constructor(piece, color) {
+        this.piece = piece
+        this.color = color;
+    }
+
+
 }
 
 
@@ -42,7 +48,7 @@ function generateBoard() {
 
     for (let y = 0; y < board.numOfRows; y++) {
         board.spaceArrs[y] = [];
-        let row = document.createElement("tr");
+        let row = document.createElement("div");
 
         for (let x = 0; x < board.numOfCols; x++) {
             let color;
@@ -54,7 +60,7 @@ function generateBoard() {
             board.spaceArrs[y][x] = new Space(color, x, y);
 
             // Create visual representation of the space
-            let space = document.createElement("td");
+            let space = document.createElement("div");
             space.style.backgroundColor = color;
             space.style.height = "100px";
             space.style.width = "100px";
@@ -67,5 +73,11 @@ function generateBoard() {
     return board;
 }
 
+function generatePieces() {
+    console.log("Board: ", board);
+
+}
+
 var board = generateBoard();
 
+generatePieces();
