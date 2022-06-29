@@ -38,7 +38,7 @@ class Piece {
 
 
 function generateBoard() {
-    var board = new Board();
+    let board = new Board();
 
     for (let y = 0; y < board.numOfRows; y++) {
         board.spaceArrs[y] = [];
@@ -63,6 +63,9 @@ function generateBoard() {
         }
         parent.appendChild(row);
     }
+
+    return board;
 }
 
-generateBoard();
+var board = generateBoard();
+
