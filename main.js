@@ -31,8 +31,9 @@ class Board {
 class Space {
 
 
-    constructor(color, x, y) {
+    constructor(color, space, x, y) {
         this.color = color;     // white or black
+        this.space = space;     // the ui space
         this.x = x;             // start from top left
         this.y = y;             //
     }
@@ -80,15 +81,19 @@ function generateBoard() {
             if ((x + y) % 2 == 0) color = white;
             else color = black;
 
-            board.spaceArrs[y][x] = new Space(color, x, y);
+            const space = new Space(color, x, y);
+
 
             // Create visual representation of the space
-            let space = document.createElement("div");
-            space.style.backgroundColor = color;
-            space.style.height = "100px";
-            space.style.width = "100px";
-            space.style.display = "inline-block";
-            row.appendChild(space);
+            let uiSpace = document.createElement("div");
+            uiSpace.style.backgroundColor = color;
+            uiSpace.style.height = "100px";
+            uiSpace.style.width = "100px";
+            uiSpace.style.display = "inline-block";
+            row.appendChild(uiSpace);
+
+            space.space = uiSpace;
+            board.spaceArrs[y][x] = space;
         }
         parent.appendChild(row);
     }
@@ -133,11 +138,12 @@ function generatePieces(fen) {
 
                 let pieceImg = document.createElement("img");
                 pieceImg.style.position = "absolute";
-                pieceImg.style.top = (y * 100) + "px";
-                pieceImg.style.left = (x * 100) + "px";
                 pieceImg.src = path + color + pieceType + ".svg";
 
-                parent.appendChild(pieceImg)
+
+                const uiSpace = board.spaceArrs[y][x];
+
+                uiSpace.space.appendChild(pieceImg)
 
                 x++;
             }
