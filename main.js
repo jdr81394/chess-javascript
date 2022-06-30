@@ -3,6 +3,16 @@ const parent = document.getElementById("parent");
 const black = "BLACK";
 const white = "WHITE";
 
+const rook = "Rook";
+const knight = "Knight";
+const bishop = "Bishop";
+const queen = "Queen";
+const king = "King";
+const pawn = "Pawn";
+
+const path = "./assets/";
+// const piecesArr = [rook, knight, bishop, queen, king];
+
 class Board {
 
 
@@ -33,10 +43,23 @@ class Space {
 
 class Piece {
 
+    // none = 0;
+    // king = 1;
+    // pawn = 2;
+    // knight = 3;
+    // bishop = 4;
+    // rook = 5;
+    // queen = 6;
 
-    constructor(piece, color) {
-        this.piece = piece
+    // white = 8;
+    // black = 16;
+
+
+    constructor(piece, color, x, y) {
+        this.piece = piece;
         this.color = color;
+        this.x = x;
+        this.y = y;
     }
 
 
@@ -73,11 +96,57 @@ function generateBoard() {
     return board;
 }
 
-function generatePieces() {
-    console.log("Board: ", board);
+function generatePieces(fen) {
+    // using FEN string rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+    const dictionary = {
+        "r": rook,
+        "n": knight,
+        "b": bishop,
+        "q": queen,
+        "k": king,
+        "p": pawn
+    };
+
+    const fenBoard = fen.split(" ")[0];
+    // console.log("fenBoard: ", fenBoard);
+    let x = 0;
+    let y = 7;
+
+    for (let i = 0; i < fenBoard.length; i++) {
+        // console.log("fenboard", fenBoard[i]);
+        const character = fenBoard[i];
+        if (character === "/") {
+            console.log("x ", x, " and y: ", y);
+            x = 0;
+            y--;
+        }
+        else {
+
+            // If it is not equal to NaN, that means it IS a number, so we move up by the value 
+            if (character.match("[0-9]")) {
+                x += parseInt(character);
+            } else {
+                const color = character.match("^[A-Z]*$") ? black : white;
+                const pieceType = dictionary[character.toLowerCase()];
+
+                const piece = new Piece(pieceType, color, x, y);
+
+                let pieceImg = document.createElement("img");
+                pieceImg.style.position = "absolute";
+                pieceImg.style.top = (y * 100) + "px";
+                pieceImg.style.left = (x * 100) + "px";
+                pieceImg.src = path + color + pieceType + ".svg";
+
+                parent.appendChild(pieceImg)
+
+                x++;
+            }
+        }
+    }
+
 
 }
 
 var board = generateBoard();
 
-generatePieces();
+generatePieces("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
